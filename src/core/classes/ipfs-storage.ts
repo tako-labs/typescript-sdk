@@ -226,7 +226,7 @@ export class IpfsStorage implements IStorage {
     const sanitizedMetadatas = replaceGatewayUrlWithHash(
       metadatas,
       "ipfs://",
-      this.gatewayUrl,
+      this.gatewayUrl.replace('ipfs/',''),
     );
     // extract any binary file to upload
     const filesToUpload = sanitizedMetadatas.flatMap((m: JsonObject) =>
