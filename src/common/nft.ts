@@ -21,7 +21,7 @@ import { UploadProgressEvent } from "../types/index";
 const FALLBACK_METADATA = {
   name: "Failed to load NFT metadata",
 };
-
+// const regex = /ipfs/i;
 /**
  * fetches the token metadata
  * @param tokenId - the id (to get it back in the output)
@@ -35,18 +35,19 @@ export async function fetchTokenMetadata(
   tokenUri: string,
   storage: IStorage,
 ): Promise<NFTMetadata> {
-  const parsedUri = tokenUri.replace(
+  const _tokenUri = tokenUri.replaceAll("ipfs/", "");
+  let parsedUri = _tokenUri.replace(
     "{id}",
     ethers.utils.hexZeroPad(BigNumber.from(tokenId).toHexString(), 32).slice(2),
   );
-  let jsonMetadata;
+  let jsonMetadata = {};
   try {
     jsonMetadata = await storage.get(parsedUri);
   } catch (err) {
     console.warn(
       `failed to get token metadata: ${JSON.stringify({
         tokenId,
-        tokenUri,
+        _tokenUri,
       })} -- falling back to default metadata`,
       err,
     );
@@ -55,8 +56,8 @@ export async function fetchTokenMetadata(
 
   return CommonNFTOutput.parse({
     id: BigNumber.from(tokenId),
-    uri: tokenUri,
     ...jsonMetadata,
+    uri: _tokenUri,
   });
 }
 
@@ -102,6 +103,7 @@ export async function fetchTokenMetadataForContract(
   if (!uri) {
     throw new NotFoundError();
   }
+  console.log(`fetched token metadata: ${JSON.stringify(uri)}`);
   return fetchTokenMetadata(tokenId, uri, storage);
 }
 

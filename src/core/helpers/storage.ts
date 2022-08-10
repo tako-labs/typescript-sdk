@@ -124,8 +124,9 @@ export function resolveGatewayUrl<T extends Json>(
   gatewayUrl: string,
 ): T {
   if (typeof object === "string") {
-    return object && object.toLowerCase().includes(scheme)
-      ? (object.replace(scheme, gatewayUrl) as T)
+    var obj = object.replaceAll('ipfs/', "");
+    return obj && obj.toLowerCase().includes(scheme)
+      ? (obj.replace(scheme, gatewayUrl) as T)
       : object;
   } else {
     return object;
