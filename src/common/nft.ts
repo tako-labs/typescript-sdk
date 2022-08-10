@@ -103,7 +103,6 @@ export async function fetchTokenMetadataForContract(
   if (!uri) {
     throw new NotFoundError();
   }
-  console.log(`fetched token metadata: ${JSON.stringify(uri)}`);
   return fetchTokenMetadata(tokenId, uri, storage);
 }
 
