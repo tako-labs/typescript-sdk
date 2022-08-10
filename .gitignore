@@ -3,7 +3,6 @@ typechain/
 lib/
 temp/
 bin/
-dist/
 .idea
 .vscode
 yarn-error.log
